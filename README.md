@@ -1,4 +1,4 @@
-# VORP STORE Lua*
+# VORP STORE Blacksmith Lua*
 
 vorp stores in Lua (not a conversion from th C#) totaly from scratch
 
@@ -10,7 +10,7 @@ vorp stores in Lua (not a conversion from th C#) totaly from scratch
 
 
 ## instalation
--`ensure vorp_stores` in your resources.cfg
+-`ensure vorp_stores_blacksmith` in your resources.cfg
 - edit the config file
 - edit the language file 
 - start your server 

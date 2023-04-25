@@ -21,7 +21,8 @@ function AddBlip(Store)
             Config.Stores[Store].y, Config.Stores[Store].z)
         SetBlipSprite(Config.Stores[Store].BlipHandle, Config.Stores[Store].sprite, 1)
         SetBlipScale(Config.Stores[Store].BlipHandle, 0.2)
-        Citizen.InvokeNative(0x9CB1A1623062F402, Config.Stores[Store].BlipHandle, Config.Stores[Store].BlipName)
+        _SetBlipName( Config.Stores[Store].BlipHandle, Config.Stores[Store].BlipName )
+        --Citizen.InvokeNative(0x9CB1A1623062F402, Config.Stores[Store].BlipHandle, Config.Stores[Store].BlipName)
     end
 end
 
@@ -40,7 +41,9 @@ function SpawnNPC(Store)
     LoadModel(v.NpcModel)
     if v.NpcAllowed then
         local npc = CreatePed(v.NpcModel, v.x, v.y, v.z, v.h, false, true, true, true)
-        Citizen.InvokeNative(0x283978A15512B2FE, npc, true)
+        _SetRandomOutfitVariation(npc)    
+        _PlaceEntityOnGroundProperly(npc)    
+        Wait(500)
         SetEntityCanBeDamaged(npc, false)
         SetEntityInvincible(npc, true)
         Wait(500)
@@ -48,6 +51,32 @@ function SpawnNPC(Store)
         SetBlockingOfNonTemporaryEvents(npc, true)
         Config.Stores[Store].NPC = npc
     end
+end
+
+function _SetBlipName( blip, name )
+    --SetBlipName(blip, name )
+    Citizen.InvokeNative(0x9CB1A1623062F402, blip, name )  
+    Wait(500)
+end 
+
+function _PlaceEntityOnGroundProperly(npc)
+    --PlaceEntityOnGroundProperly(npc, true)
+    Citizen.InvokeNative(0x9587913B9E772D29, npc, true)   
+end 
+
+function _SetRandomOutfitVariation(npc)
+    --SetRandomOutfitVariation(npc, true)
+    Citizen.InvokeNative(0x283978A15512B2FE, npc, true)   
+end 
+
+function _UiPromptSetUrgentPulsingEnabled(prompt, toggle)
+    --UiPromptSetUrgentPulsingEnabled(prompt, toggle)
+    Citizen.InvokeNative(0xC5F428EE08FA7F2C, prompt, toggle)  
+end
+
+function _UiPromptHasStandardModeCompleted(prompt)
+    --UiPromptHasStandardModeCompleted(prompt, toggle) -- toggle = 0
+    Citizen.InvokeNative(0xC92AC953F0A982AE, prompt)  
 end
 
 ------------------ PROMPTS ------------------
@@ -61,7 +90,8 @@ function PromptSetUp()
     PromptSetVisible(OpenStores, 1)
     PromptSetStandardMode(OpenStores, 1)
     PromptSetGroup(OpenStores, PromptGroup)
-    Citizen.InvokeNative(0xC5F428EE08FA7F2C, OpenStores, true)
+    _UiPromptSetUrgentPulsingEnabled(OpenStores, true)
+    --Citizen.InvokeNative(0xC5F428EE08FA7F2C, OpenStores, true)
     PromptRegisterEnd(OpenStores)
 end
 
@@ -75,7 +105,8 @@ function PromptSetUp2()
     PromptSetVisible(CloseStores, 1)
     PromptSetStandardMode(CloseStores, 1)
     PromptSetGroup(CloseStores, PromptGroup2)
-    Citizen.InvokeNative(0xC5F428EE08FA7F2C, CloseStores, true)
+    _UiPromptSetUrgentPulsingEnabled(CloseStores, true)
+    --Citizen.InvokeNative(0xC5F428EE08FA7F2C, CloseStores, true)
     PromptRegisterEnd(CloseStores)
 
 end
@@ -103,7 +134,6 @@ Citizen.CreateThread(function()
         local hour = GetClockHours()
 
         if isInMenu == false and not dead then
-
             for storeId, storeConfig in pairs(Config.Stores) do
                 if storeConfig.StoreHoursAllowed then
                     if hour >= storeConfig.StoreClose or hour < storeConfig.StoreOpen then
@@ -128,6 +158,7 @@ Citizen.CreateThread(function()
                             PromptSetActiveGroupThisFrame(PromptGroup2, label2)
 
                             if Citizen.InvokeNative(0xC92AC953F0A982AE, CloseStores) then
+                            --if _UiPromptHasStandardModeCompleted(CloseStores) then
                                 Wait(100)
                                 TriggerEvent("vorp:TipRight",
                                     _U("closed") ..
@@ -148,52 +179,42 @@ Citizen.CreateThread(function()
                             local distance = #(coordsDist - coordsStore)
 
                             if (distance <= storeConfig.distanceOpenStore) then -- check distance
-
                                 sleep = false
                                 local label = CreateVarString(10, 'LITERAL_STRING', storeConfig.PromptName)
                                 PromptSetActiveGroupThisFrame(PromptGroup, label)
-
-                                if Citizen.InvokeNative(0xC92AC953F0A982AE, OpenStores) then -- iff all pass open menu
+                                if Citizen.InvokeNative(0xC92AC953F0A982AE, OpenStores) then -- if all pass open menu
+                                --if _UiPromptHasStandardModeCompleted(OpenStores) then                                    
                                     OpenCategory(storeId)
-
                                     DisplayRadar(false)
                                     TaskStandStill(player, -1)
                                 end
-
                             end
-
                         else -- job only
                             local coordsDist = vector3(coords.x, coords.y, coords.z)
                             local coordsStore = vector3(storeConfig.x, storeConfig.y, storeConfig.z)
                             local distance = #(coordsDist - coordsStore)
 
                             if (distance <= storeConfig.distanceOpenStore) then
+                                TriggerServerEvent(GetCurrentResourceName()..":getPlayerJob")
+                                Wait(200)
+                                if PlayerJob then
+                                    if CheckJob(storeConfig.AllowedJobs, PlayerJob) then
+                                        if tonumber(storeConfig.JobGrade) <= tonumber(JobGrade) then
+                                            sleep = false
+                                            local label = CreateVarString(10, 'LITERAL_STRING', storeConfig.PromptName)
 
-                                sleep = false
-                                local label = CreateVarString(10, 'LITERAL_STRING', storeConfig.PromptName)
-
-                                PromptSetActiveGroupThisFrame(PromptGroup, label)
-                                if Citizen.InvokeNative(0xC92AC953F0A982AE, OpenStores) then
-                                    TriggerServerEvent("vorp_stores:getPlayerJob")
-                                    Wait(200)
-                                    if PlayerJob then
-                                        if CheckJob(storeConfig.AllowedJobs, PlayerJob) then
-                                            if tonumber(storeConfig.JobGrade) <= tonumber(JobGrade) then
-
+                                            PromptSetActiveGroupThisFrame(PromptGroup, label)
+                                            if Citizen.InvokeNative(0xC92AC953F0A982AE, OpenStores) then
+                                            --if _UiPromptHasStandardModeCompleted(OpenStores) then                                                 
                                                 OpenCategory(storeId)
-
                                                 DisplayRadar(false)
                                                 TaskStandStill(player, -1)
                                             end
                                         end
                                     end
-                                end
+                                 end
                             end
-
-
-
                         end
-
                     end
                 else
                     if not Config.Stores[storeId].BlipHandle and storeConfig.blipAllowed then
@@ -209,52 +230,42 @@ Citizen.CreateThread(function()
                         local distance = #(coordsDist - coordsStore)
 
                         if (distance <= storeConfig.distanceOpenStore) then -- check distance
-
                             sleep = false
                             local label = CreateVarString(10, 'LITERAL_STRING', storeConfig.PromptName)
                             PromptSetActiveGroupThisFrame(PromptGroup, label)
-
+                            --if _UiPromptHasStandardModeCompleted(OpenStores) then
                             if Citizen.InvokeNative(0xC92AC953F0A982AE, OpenStores) then -- iff all pass open menu
                                 OpenCategory(storeId)
-
                                 DisplayRadar(false)
                                 TaskStandStill(player, -1)
                             end
-
                         end
-
                     else -- job only
-
                         local coordsDist = vector3(coords.x, coords.y, coords.z)
                         local coordsStore = vector3(storeConfig.x, storeConfig.y, storeConfig.z)
                         local distance = #(coordsDist - coordsStore)
 
-                       if (distance <= storeConfig.distanceOpenStore) then
-
-                            sleep = false
-                            local label = CreateVarString(10, 'LITERAL_STRING', storeConfig.PromptName)
-                            PromptSetActiveGroupThisFrame(PromptGroup, label)
-                            if Citizen.InvokeNative(0xC92AC953F0A982AE, OpenStores) then
-                                TriggerServerEvent("vorp_stores:getPlayerJob")
-                                Wait(200)
-                                if PlayerJob then
-                                    if CheckJob(storeConfig.AllowedJobs, PlayerJob) then
-                                        if tonumber(storeConfig.JobGrade) <= tonumber(JobGrade) then
+                        if (distance <= storeConfig.distanceOpenStore) then
+                            TriggerServerEvent(GetCurrentResourceName()..":getPlayerJob")
+                            Wait(200)
+                            if PlayerJob then
+                                if CheckJob(storeConfig.AllowedJobs, PlayerJob) then
+                                    if tonumber(storeConfig.JobGrade) <= tonumber(JobGrade) then
+                                        sleep = false
+                                        local label = CreateVarString(10, 'LITERAL_STRING', storeConfig.PromptName)
+                                        PromptSetActiveGroupThisFrame(PromptGroup, label)
+                                        --if _UiPromptHasStandardModeCompleted(OpenStores) then
+                                        if Citizen.InvokeNative(0xC92AC953F0A982AE, OpenStores) then
                                             OpenCategory(storeId)
                                             DisplayRadar(false)
                                             TaskStandStill(player, -1)
                                         end
                                     end
                                 end
-                            end
-                        end
-
-
-
-
+                            end        
+                        end 
                     end
                 end
-
             end
         end
         if sleep then
@@ -266,12 +277,14 @@ end)
 
 ---- items category ------
 function OpenCategory(storeId)
+    print("OpenCategory")
     MenuData.CloseAll()
     isInMenu = true
 
     local elements = {}
 
     for k, v in pairs(Config.Stores[storeId].category) do
+        print("k, v",k, v)
         elements[#elements + 1] = {
             label = v,
             value = v,
@@ -298,11 +311,13 @@ end
 
 -- sell only
 function OpenSubMenu(storeId, category)
+    print("OpenSubMenu")
     MenuData.CloseAll()
     isInMenu = true
     local elements = {}
 
     for k, v in pairs(Config.Stores[storeId].storeType) do
+        print("k, v",k, v)
         elements[#elements + 1] = {
             label = v,
             value = v,
@@ -322,12 +337,13 @@ function OpenSubMenu(storeId, category)
             _G[data.trigger](storeId, category)
         end
 
-        if (data.current.value == "sell") then --translate here same as the config
+        if (data.current.value == "Sell") then --translate here same as the config
+            print("sell")
             OpenSellMenu(storeId, category)
-
         end
 
-        if (data.current.value == "buy") then --translate here same as the config
+        if (data.current.value == "Buy") then --translate here same as the config
+            print("buy")
             OpenBuyMenu(storeId, category)
         end
 
@@ -337,22 +353,22 @@ function OpenSubMenu(storeId, category)
         ClearPedTasksImmediately(PlayerPedId())
         DisplayRadar(true)
     end)
-
 end
 
 -- sell
 function OpenSellMenu(storeId, category)
+    print("OpenSellMenu")
     MenuData.CloseAll()
     isInMenu = true
     local menuElements = {}
     local player = PlayerPedId()
     local storeConfig = Config.Stores[storeId]
-
     local elementIndex = 1
-    TriggerServerEvent("vorp_stores:getShopStock")
+    TriggerServerEvent(GetCurrentResourceName()..":getShopStock")
     Citizen.Wait(100)
-    
+     
     for index, storeItem in ipairs(Config.SellItems[storeId]) do
+        print("SellItems", index, storeItem)
         local itemFound = false
 
         if storeItem.category == category then
@@ -381,13 +397,10 @@ function OpenSellMenu(storeId, category)
                                 storeItem.desc,
                             info = storeItem
             
-                        }
-            
-                        elementIndex = elementIndex + 1
-    
+                        }            
+                        elementIndex = elementIndex + 1    
                     end
-                end
-  
+                end  
             end
             
             if not itemFound then
@@ -405,15 +418,10 @@ function OpenSellMenu(storeId, category)
                         storeItem.desc,
                     info = storeItem
     
-                }
-    
-                elementIndex = elementIndex + 1
-    
-                
-            end
-            
+                }    
+                elementIndex = elementIndex + 1               
+            end            
         end
-
     end
 
     MenuData.Open('default', GetCurrentResourceName(), 'menuapi' .. storeId .. category, {
@@ -455,17 +463,11 @@ function OpenSellMenu(storeId, category)
 
             TriggerEvent("vorpinputs:advancedInput", json.encode(myInput), function(result)
                 local qty = tonumber(result)
-
                 if qty ~= nil and qty ~= 0 and qty > 0 then
-
-                    TriggerServerEvent("vorp_stores:sell", ItemLabel, ItemName, currencyType, sellPrice, qty,storeId) -- sell it
-
+                    TriggerServerEvent(GetCurrentResourceName()..":sell", ItemLabel, ItemName, currencyType, sellPrice, qty,storeId) -- sell it
                 else
-
                     TriggerEvent("vorp:TipRight", _U("insertamount"), 3000)
-
                 end
-
             end)
         end
     end, function(data, menu)
@@ -479,16 +481,18 @@ end
 
 --- buy
 function OpenBuyMenu(storeId, category)
+    print("OpenBuyMenu")
     MenuData.CloseAll()
     isInMenu = true
     local menuElements = {}
     local player = PlayerPedId()
     local storeConfig = Config.Stores[storeId]
     local elementIndex = 1
-    TriggerServerEvent("vorp_stores:getShopStock")
+    TriggerServerEvent(GetCurrentResourceName()..":getShopStock")
     Citizen.Wait(100)
 
     for index, storeItem in ipairs(Config.BuyItems[storeId]) do
+        print("SellItems", index, storeItem)
         local itemFound = false
 
         if storeItem.category == category then
@@ -515,15 +519,11 @@ function OpenBuyMenu(storeId, category)
                                 '</span>' .. '<span style="font-size:30px;">' .. string.format("%.2f", storeItem.buyprice) ..
                                 "</span><span style='color:Yellow;'>  " .. storeItem.currencyType .. "</span><br><br><br>" ..
                                 storeItem.desc,
-                            info = storeItem
-            
-                        }
-            
-                        elementIndex = elementIndex + 1
-    
+                            info = storeItem            
+                        }            
+                        elementIndex = elementIndex + 1    
                     end
-                end
-  
+                end  
             end
             
             if not itemFound then
@@ -541,15 +541,10 @@ function OpenBuyMenu(storeId, category)
                         storeItem.desc,
                     info = storeItem
     
-                }
-    
-                elementIndex = elementIndex + 1
-    
-                
-            end
-            
+                }    
+                elementIndex = elementIndex + 1                
+            end            
         end
-
     end
 
     MenuData.Open('default', GetCurrentResourceName(), 'menuapi' .. storeId .. category, {
@@ -595,7 +590,7 @@ function OpenBuyMenu(storeId, category)
                 local qty = tonumber(result)
                 if qty ~= nil and qty ~= 0 and qty > 0 then
 
-                    TriggerServerEvent("vorp_stores:buy", ItemLabel, ItemName, currencyType, buyPrice, qty,storeId) -- sell it
+                    TriggerServerEvent(GetCurrentResourceName()..":buy", ItemLabel, ItemName, currencyType, buyPrice, qty,storeId) -- sell it
                 else
                     TriggerEvent("vorp:TipRight", _U("insertamount"), 3000)
                 end
@@ -612,19 +607,19 @@ function OpenBuyMenu(storeId, category)
 
 end
 
-RegisterNetEvent("vorp_stores:sendShopStock")
-AddEventHandler("vorp_stores:sendShopStock", function(stock)
+RegisterNetEvent(GetCurrentResourceName()..":sendShopStock")
+AddEventHandler(GetCurrentResourceName()..":sendShopStock", function(stock)
     shopStocks = stock
 end)
 
-RegisterNetEvent("vorp_stores:sendPlayerJob")
-AddEventHandler("vorp_stores:sendPlayerJob", function(Job, grade)
+RegisterNetEvent(GetCurrentResourceName()..":sendPlayerJob")
+AddEventHandler(GetCurrentResourceName()..":sendPlayerJob", function(Job, grade)
     PlayerJob = Job
     JobGrade = grade
 end)
 
-RegisterNetEvent("vorp_stores:RefreshStorePrices")
-AddEventHandler("vorp_stores:RefreshStorePrices", function(SellItems, BuyItems)
+RegisterNetEvent(GetCurrentResourceName()..":RefreshStorePrices")
+AddEventHandler(GetCurrentResourceName()..":RefreshStorePrices", function(SellItems, BuyItems)
     print("refresh")
     Config.SellItems = SellItems
     Config.BuyItems = BuyItems
@@ -635,7 +630,7 @@ AddEventHandler('onClientResourceStart', function(resourceName)
         return
     end
     Wait(1000)
-    TriggerServerEvent("vorp_stores:GetRefreshedPrices")
+    TriggerServerEvent(GetCurrentResourceName()..":GetRefreshedPrices")
 end)
 
 AddEventHandler('onResourceStop', function(resourceName)

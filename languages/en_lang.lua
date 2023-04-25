@@ -30,7 +30,5 @@ Locales["en_lang"] = {
     am = ":00~q~am to ~o~",
     pm = ":00~q~pm",
     limitSell = "I no longer buy so much of this item anymore",
-    limitBuy = "I have unfortunately no longer so much in stock",
-    hassold = "has sold", -- for webhook
-    hasbought = "has bought" -- for webhook
+    limitBuy = "I have unfortunately no longer so much in stock"
 }
