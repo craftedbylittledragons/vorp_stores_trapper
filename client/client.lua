@@ -61,22 +61,21 @@ end
 
 function _PlaceEntityOnGroundProperly(npc)
     --PlaceEntityOnGroundProperly(npc, true)
-    Citizen.InvokeNative(0x9587913B9E772D29, npc, true)   
+    Citizen.InvokeNative(0x9587913B9E772D29, npc, true)  
+    Wait(500)
 end 
-
 function _SetRandomOutfitVariation(npc)
     --SetRandomOutfitVariation(npc, true)
-    Citizen.InvokeNative(0x283978A15512B2FE, npc, true)   
+    Citizen.InvokeNative(0x283978A15512B2FE, npc, true) 
 end 
-
 function _UiPromptSetUrgentPulsingEnabled(prompt, toggle)
     --UiPromptSetUrgentPulsingEnabled(prompt, toggle)
-    Citizen.InvokeNative(0xC5F428EE08FA7F2C, prompt, toggle)  
+    Citizen.InvokeNative(0xC5F428EE08FA7F2C, prompt, toggle)   
 end
 
 function _UiPromptHasStandardModeCompleted(prompt)
-    --UiPromptHasStandardModeCompleted(prompt, toggle) -- toggle = 0
-    Citizen.InvokeNative(0xC92AC953F0A982AE, prompt)  
+    --UiPromptHasStandardModeCompleted(prompt, toggle)
+    Citizen.InvokeNative(0xC92AC953F0A982AE, prompt)   
 end
 
 ------------------ PROMPTS ------------------

@@ -1,7 +1,3 @@
-<1.6.1>
---- brach-diverged 
-- This version is for blacksmith items and stores only. 
-- Changed all event calls for 'vorp' or 'vorp_stores' to be GetResourceName so the script isolates it's calls to it's self.
 <1.6>
 - fix for npcs not spawning when  StoreHoursAllowed is set to false
 - update client.lua
