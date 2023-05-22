@@ -15,25 +15,34 @@ Config.defaultlang = "en_lang"
        -- open stores
 Config.Key = 0x760A9C6F --[G]
 
-
---Webhook Section, description is in translation
-Config.UseWebhook = false -- Use webhook
-
---Mandatory Webhook Parts
-Config.WebhookTitle = ""
-Config.Webhook = ""
-
---Optional Webhook Parts, if not filled will default vorp_core config
-Config.WebhookColor = ""
-Config.WebhookName = ""
-Config.WebhookLogo = ""
-Config.WebhookLogo2 = ""
-Config.WebhookAvatar = ""
-
-
     --- STORES ---
 
 Config.Stores = {
+
+
+-----------------------------------------------------------------------------
+--------------------------------------Armadillo------------------------------
+-----------------------------------------------------------------------------
+  
+-----------------------------------------------------------------------------
+--------------------------------------Blackwater-----------------------------
+-----------------------------------------------------------------------------
+   
+-----------------------------------------------------------------------------
+--------------------------------------Rhodes---------------------------------
+----------------------------------------------------------------------------- 
+      
+-----------------------------------------------------------------------------
+--------------------------------------St-Denis-------------------------------
+-----------------------------------------------------------------------------
+ 
+-----------------------------------------------------------------------------
+--------------------------------------Strawberry-----------------------------
+-----------------------------------------------------------------------------
+ 
+-----------------------------------------------------------------------------
+--------------------------------------Tumbleweed-----------------------------
+-----------------------------------------------------------------------------
  
 -----------------------------------------------------------------------------
 --------------------------------------Valentine------------------------------
@@ -58,7 +67,11 @@ Config.Stores = {
         StoreOpen = 7, -- am
         StoreClose = 21 -- pm
 
-    },  
+    }, 
+-----------------------------------------------------------------------------
+--------------------------------------Vanhorn--------------------------------
+-----------------------------------------------------------------------------
+ 
 
 }
 
@@ -75,9 +88,11 @@ Config.Stores = {
     -- category = where the item will be displayed at 
 
 Trapper_Sell_Items = {
-            
+   
         --Misc
-             { itemLabel = "Snake Poison", itemName = "Snake_Poison", currencyType = "cash", sellprice = 1, randomprice = math.random(30, 55), desc = "Sell Snake Poison", category = "Misc" },
+            { itemLabel = "Fish Eggs", itemName = "fish_eggs", currencyType = "cash", sellprice = 1, randomprice = math.random(30, 55), desc = "Sell Fish Eggs", category = "Misc" },   
+            { itemLabel = "Fish Head", itemName = "fish_head", currencyType = "cash", sellprice = 1, randomprice = math.random(30, 55), desc = "Sell Fish Head", category = "Misc" },
+            { itemLabel = "Snake Poison", itemName = "Snake_Poison", currencyType = "cash", sellprice = 1, randomprice = math.random(30, 55), desc = "Sell Snake Poison", category = "Misc" },
             { itemLabel = "Wool", itemName = "wool", currencyType = "cash", sellprice = 1, randomprice = math.random(30, 55), desc = "Sell Wool", category = "Misc" }    
 }
 -----------------------------------------------------------------------------
@@ -129,6 +144,10 @@ Config.SellItems = {
     -- category = where the item will be displayed at 
 
 Trapper_Buy_Items = {
+ 
+    --Misc
+        { itemLabel = "Fish Eggs", itemName = "fish_eggs", currencyType = "cash", buyprice = 5, randomprice = math.random(30, 55), desc = "Buy Fish Eggs", category = "Misc" },   
+        { itemLabel = "Fish Head", itemName = "fish_head", currencyType = "cash", buyprice = 2, randomprice = math.random(30, 55), desc = "Buy Fish Head", category = "Misc" },
         { itemLabel = "Snake Poison", itemName = "Snake_Poison", currencyType = "cash", buyprice = 25, randomprice = math.random(30, 55), desc = "Buy Snake Poison", category = "Misc" },
         { itemLabel = "Wool", itemName = "wool", currencyType = "cash", buyprice = 10, randomprice = math.random(30, 55), desc = "Buy Wool", category = "Misc" }   
 }
