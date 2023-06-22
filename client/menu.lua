@@ -116,7 +116,7 @@ function OpenSellMenu(storeId, category)
                             desc = "" ..
                                 '<span style="font-family: crock; src:nui://menuapi/html/fonts/crock.ttf) format("truetype")</span>' ..
                                 _U("sellfor") .. '<span style="margin-left:90px;">' .. '<span style="font-size:25px;">' .. ctp ..
-                                '</span>' .. '<span style="font-size:30px;">' .. string.format("%.2f", storeItem.sellprice) ..
+                                '</span>' .. '<span style="font-size:30px;">' .. string.format("%.2f", storeItem.item_price) ..
                                 "</span><span style='color: Yellow;'>  " .. storeItem.currencyType .. "</span><br><br><br>" ..
                                 storeItem.desc,
                             info = storeItem
@@ -137,7 +137,7 @@ function OpenSellMenu(storeId, category)
                     desc = "" ..
                         '<span style="font-family: crock; src:nui://menuapi/html/fonts/crock.ttf) format("truetype")</span>' ..
                         _U("sellfor") .. '<span style="margin-left:90px;">' .. '<span style="font-size:25px;">' .. ctp ..
-                        '</span>' .. '<span style="font-size:30px;">' .. string.format("%.2f", storeItem.sellprice) ..
+                        '</span>' .. '<span style="font-size:30px;">' .. string.format("%.2f", storeItem.item_price) ..
                         "</span><span style='color: Yellow;'>  " .. storeItem.currencyType .. "</span><br><br><br>" ..
                         storeItem.desc,
                     info = storeItem
@@ -162,7 +162,7 @@ function OpenSellMenu(storeId, category)
             local ItemName = data.current.info.itemName
             local ItemLabel = data.current.info.itemLabel
             local currencyType = data.current.info.currencyType
-            local sellPrice = data.current.info.sellprice
+            local sellPrice = data.current.info.item_price
 
             local myInput = {
                 type = "enableinput", -- dont touch
@@ -240,7 +240,7 @@ function OpenBuyMenu(storeId, category)
                             desc = "" ..
                                 '<span style="font-family: crock; src:nui://menuapi/html/fonts/crock.ttf) format("truetype")</span>' ..
                                 _U("buyfor") .. '<span style="margin-left:90px;">' .. '<span style="font-size:25px;">' .. ctp ..
-                                '</span>' .. '<span style="font-size:30px;">' .. string.format("%.2f", storeItem.buyprice) ..
+                                '</span>' .. '<span style="font-size:30px;">' .. string.format("%.2f", storeItem.item_price) ..
                                 "</span><span style='color:Yellow;'>  " .. storeItem.currencyType .. "</span><br><br><br>" ..
                                 storeItem.desc,
                             info = storeItem            
@@ -260,7 +260,7 @@ function OpenBuyMenu(storeId, category)
                     desc = "" ..
                         '<span style="font-family: crock; src:nui://menuapi/html/fonts/crock.ttf) format("truetype")</span>' ..
                         _U("buyfor") .. '<span style="margin-left:90px;">' .. '<span style="font-size:25px;">' .. ctp ..
-                        '</span>' .. '<span style="font-size:30px;">' .. string.format("%.2f", storeItem.buyprice) ..
+                        '</span>' .. '<span style="font-size:30px;">' .. string.format("%.2f", storeItem.item_price) ..
                         "</span><span style='color:Yellow;'>  " .. storeItem.currencyType .. "</span><br><br><br>" ..
                         storeItem.desc,
                     info = storeItem
@@ -286,7 +286,7 @@ function OpenBuyMenu(storeId, category)
             local ItemName = data.current.info.itemName
             local ItemLabel = data.current.info.itemLabel
             local currencyType = data.current.info.currencyType
-            local buyPrice = data.current.info.buyprice
+            local buyPrice = data.current.info.item_price
 
             local myInput = {
                 type = "enableinput", -- dont touch

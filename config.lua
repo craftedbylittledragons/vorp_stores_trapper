@@ -90,10 +90,10 @@ Config.Stores = {
 Trapper_Sell_Items = {
    
         --Misc
-            { itemLabel = "Fish Eggs", itemName = "fish_eggs", currencyType = "cash", sellprice = 1, randomprice = math.random(30, 55), desc = "Sell Fish Eggs", category = "Misc" },   
-            { itemLabel = "Fish Head", itemName = "fish_head", currencyType = "cash", sellprice = 1, randomprice = math.random(30, 55), desc = "Sell Fish Head", category = "Misc" },
-            { itemLabel = "Snake Poison", itemName = "Snake_Poison", currencyType = "cash", sellprice = 1, randomprice = math.random(30, 55), desc = "Sell Snake Poison", category = "Misc" },
-            { itemLabel = "Wool", itemName = "wool", currencyType = "cash", sellprice = 1, randomprice = math.random(30, 55), desc = "Sell Wool", category = "Misc" }    
+            { itemLabel = "Fish Eggs", itemName = "fish_eggs", currencyType = "cash", item_price = 1, randomprice = math.random(30, 55), desc = "Sell Fish Eggs", category = "Misc" },   
+            { itemLabel = "Fish Head", itemName = "fish_head", currencyType = "cash", item_price = 1, randomprice = math.random(30, 55), desc = "Sell Fish Head", category = "Misc" },
+            { itemLabel = "Snake Poison", itemName = "Snake_Poison", currencyType = "cash", item_price = 1, randomprice = math.random(30, 55), desc = "Sell Snake Poison", category = "Misc" },
+            { itemLabel = "Wool", itemName = "wool", currencyType = "cash", item_price = 1, randomprice = math.random(30, 55), desc = "Sell Wool", category = "Misc" }    
 }
 -----------------------------------------------------------------------------
 --------------------------------------SELL ITEMS ----------------------------
@@ -146,10 +146,10 @@ Config.SellItems = {
 Trapper_Buy_Items = {
  
     --Misc
-        { itemLabel = "Fish Eggs", itemName = "fish_eggs", currencyType = "cash", buyprice = 5, randomprice = math.random(30, 55), desc = "Buy Fish Eggs", category = "Misc" },   
-        { itemLabel = "Fish Head", itemName = "fish_head", currencyType = "cash", buyprice = 2, randomprice = math.random(30, 55), desc = "Buy Fish Head", category = "Misc" },
-        { itemLabel = "Snake Poison", itemName = "Snake_Poison", currencyType = "cash", buyprice = 25, randomprice = math.random(30, 55), desc = "Buy Snake Poison", category = "Misc" },
-        { itemLabel = "Wool", itemName = "wool", currencyType = "cash", buyprice = 10, randomprice = math.random(30, 55), desc = "Buy Wool", category = "Misc" }   
+        { itemLabel = "Fish Eggs", itemName = "fish_eggs", currencyType = "cash", item_price = 5, randomprice = math.random(30, 55), desc = "Buy Fish Eggs", category = "Misc" },   
+        { itemLabel = "Fish Head", itemName = "fish_head", currencyType = "cash", item_price = 2, randomprice = math.random(30, 55), desc = "Buy Fish Head", category = "Misc" },
+        { itemLabel = "Snake Poison", itemName = "Snake_Poison", currencyType = "cash", item_price = 25, randomprice = math.random(30, 55), desc = "Buy Snake Poison", category = "Misc" },
+        { itemLabel = "Wool", itemName = "wool", currencyType = "cash", item_price = 10, randomprice = math.random(30, 55), desc = "Buy Wool", category = "Misc" }   
 }
 
 -----------------------------------------------------------------------------
