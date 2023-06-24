@@ -1,3 +1,9 @@
+<1.6.3>
+- Fixed Set Job issue, relog is not necessary anymore
+- Fixed joblock store menu flicker - removed job query and wait
+- Updated default config files for pharmacy, added medic
+- Updated default config files for seeds, added seeds, was copy of saloon config
+- Added store clerk turns to face player.
 <1.6.2>
 - Added floating npc fix
 - updated sell and buy price to be item price (avoid user errors)
